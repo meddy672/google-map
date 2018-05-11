@@ -1,0 +1,44 @@
+<!-- This is the corresponding "starter code" for 04_Hello Map in Udacity and Google's Maps
+API Course, Lesson 1 -->
+<html>
+ <head>
+ <!-- styles put here, but you can include a CSS file and reference it instead! -->
+ <link rel="stylesheet" type="text/css" href="css/site.css">
+ <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+ </head>
+ <body>
+
+  <main class="container-fluid">
+    <div class="row">
+        <section class="col-lg-2 sidenav">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="input-group">
+                <input data-bind="textInput: filter"
+                 type="text" class="form-control" placeholder="Filter Places"
+                 aria-describedby="basic-addon2" id="test">
+                <button data-bind="click: filterList" class="input-group-addon btn btn-primary" id="basic-addon2">Filter</button>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <hr>
+              <div data-bind="foreach: locationList">
+                <p data-bind="text: $data.title"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="col-lg-10" id="map"></section>
+    </div>
+  </main>
+   
+
+   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+   <script src="bower_components/knockout/dist/knockout.js"></script>
+   <script src="js/map-styles.js"></script>
+   <script src="js/map.js"></script>
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByucFSNhc5zgxf0bbfwrZYOTZyFbc73D8&callback=initMap"></script>
+ </body>
+</html>
