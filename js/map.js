@@ -14,6 +14,7 @@ var model = [
 
   var markers = [];
   var map;
+  var largeInfowindow = null;
  
 
 
@@ -56,18 +57,14 @@ var model = [
 
 
  function initMap() {
-
   var defaultIcon = makeMarkerIcon('0091ff');
   var highlightedIcon = makeMarkerIcon('FFFF24');
-  var largeInfowindow = new google.maps.InfoWindow();
-
-    map = new google.maps.Map(document.getElementById('map'), {
+  largeInfowindow = new google.maps.InfoWindow();
+  map = new google.maps.Map(document.getElementById('map'), {
       zoom: 11,
       center: {lat: 34.0691755, lng: -84.6587895},
       styles: styles
     });
-
-
     for(var i = 0; i < model.length; i++){
 
         var position = model[i].location;
@@ -95,10 +92,10 @@ var model = [
           this.setIcon(defaultIcon);
         });
     }
- }
+}
 
 
-   function makeMarkerIcon(markerColor) {
+function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
       'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
       '|40|_|%E2%80%A2',
@@ -106,14 +103,25 @@ var model = [
       new google.maps.Point(0, 0),
       new google.maps.Point(10, 34),
       new google.maps.Size(21,34));
-    return markerImage;
-  }
+      return markerImage;
+}
 
 
 function googleMapsCustomError(){
     alert('Google Maps custom error triggered');
 }
 
+
+function sideLinkHandler(data){
+  largeInfowindow.close()
+   for(var i = 0; i < markers.length; i++){
+      if(data.title == markers[i].title){
+        largeInfowindow.setContent(data.title);
+        largeInfowindow.open(map, markers[i]);
+        break;
+      }
+   } 
+}
 
 
 function populateInfoWindow(marker, infowindow) {

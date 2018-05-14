@@ -21,18 +21,19 @@
     color: #fff;
     display: block;
 }
+a{
+    color: #fff !important;
+}
+a:hover{
+
+    color: #146AAA !important;
+}
 .icon-bar{
 
     height: 50px;
     width: 100%;
     z-index: 100;
     background: #000;
-}
-.hamburger{
-
-    font-size: 27px;
-    cursor: pointer; 
-    color: #0091ff;
 }
 
 #map{
