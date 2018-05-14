@@ -1,35 +1,29 @@
 <html>
  <head>
- 
  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
  <link rel="stylesheet" type="text/css" href="css/site.css">
-<!--  <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
  </head>
  <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-  <a class="navbar-brand" href="#">Google Maps</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark" style="z-index: 100;">
+  <a class="navbar-brand" href="#">Map Project</a>
+  <button class="navbar-toggler" type="button" id="toggleBtn">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    Hello World
-    </div>
-</nav>
+<!--   <div class="collapse navbar-collapse" id="navbarNav">
 
+  </div> -->
+</nav>
   <main class="container-fluid">
     <div class="row">
-
-        
-        <section class="col-lg-2 sidenav" >
+        <section class="col-lg-2 col-md-3 col-sm-12 sidenav" id="navbarNav">
           <div class="row">
             <div class="col-lg-12">
               <div class="input-group">
                 <input data-bind="textInput: filter, valueUpdate: 'keyup' "
-                 type="text" class="form-control" placeholder="Filter Places"
-                 aria-describedby="basic-addon2" id="test">
+                 type="text" class="form-control" placeholder="Filter Places">
               </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12 col-md-9 col-sm-12">
               <hr>
               <div data-bind="foreach: filterList">
                 <p data-bind="text: $data.title"></p>
@@ -37,18 +31,23 @@
             </div>
           </div>
         </section>
-        
         <section class="col-lg-10" id="map"></section>
     </div>
   </main>
-   
-
    <script src="bower_components/jquery/dist/jquery.min.js"></script>
    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
    <script src="bower_components/knockout/dist/knockout.js"></script>
    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyByucFSNhc5zgxf0bbfwrZYOTZyFbc73D8&v=3&callback=initMap"></script>
    <script src="js/map-styles.js"></script>
    <script src="js/map.js"></script>
+
+   <script type="text/javascript">
+     
+     $('#toggleBtn').click(function(){
+
+        $('.sidenav').fadeToggle()
+     })
+   </script>
  </body>
 </html>
 

@@ -116,7 +116,6 @@ function googleMapsCustomError(){
 
 
 
-
 function populateInfoWindow(marker, infowindow) {
 
   if (infowindow.marker != marker) {
