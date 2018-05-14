@@ -1,7 +1,4 @@
-html, body { 
 
-	height: 100%; margin: 0; padding: 0;
- }
 
 #map {
 
@@ -12,34 +9,31 @@ html, body {
 
 .sidenav {
     height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
     background-color: #111;
     overflow-x: hidden;
-    padding-top: 20px;
+    display: block !important;
 }
 
-.sidenav a {
+.sidenav p {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 15px;
+    color: #fff !important;
     display: block;
 }
-li{
-	color: #fff !important;
-}
-ul{
-	list-style: none !important;
-}
-.sidenav {
 
-	color: #fff !important;
-}
 #basic-addon2{
 
 	border-radius: 0 !important;
+}
+.bg-dark{
+
+/*    background: #000 !important;
+    color: #fff !important;*/
+}
+
+@media only screen and (max-width: 990px) {
+    .sidenav {
+        display: none !important;
+    }
 }

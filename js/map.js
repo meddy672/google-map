@@ -10,9 +10,11 @@ var model = [
           {title: 'Overton Rise Apartments', location: {lat: 33.8862235, lng: -84.4572464},  type: 'apt'},
           {title: 'The Encore', location: {lat: 33.8799177, lng: -84.4575624}, type: 'apt'},
           {title: 'The Reserve at the Ballpark', location: {lat: 33.8944195, lng: -84.4708393},  type: 'apt'},
-  ]
+  ];
 
-
+  var markers = [];
+  var map;
+ 
 
 
   var viewModel = function() {
@@ -20,38 +22,51 @@ var model = [
     var self = this;
     self.filter = ko.observable('');
     self.locationList = ko.observableArray(model);
-    self.filterList = function(){
-
-        return ko.utils.arrayFilter(self.locationList(), function(location) {
-
-          if(location.title == self.filter()){
-
-            return location.title
+    self.markerLocations = ko.observableArray(markers);
+    self.filterList = ko.computed(function(){
+        return self.locationList().filter(
+          function(location){
+            filterMarkers(self.filter())
+            return (self.filter().length == 0 || location.title.toLowerCase().includes(self.filter().toLowerCase()));
           }
-          
-           else if( location.title.includes(self.filter()) ){
-              
-              return location.title
-           }
+        );
+      });
+  }
 
-           else{
 
-              return self.locationList.remove(location)
-           }
- 
-        });
-    };
+
+  function filterMarkers(title){
+
+    if(markers.length != 0 ){
+
+      for(var i = 0; i < markers.length; i++){
+
+        if(markers[i].title.toLowerCase().includes(title.toLowerCase())){
+
+          markers[i].setVisible(true);
+        }
+        else{
+          markers[i].setVisible(false)
+        }
+
+      }
+    }
   }
  
 
 
  function initMap() {
 
-    var map = new google.maps.Map(document.getElementById('map'), {
+  var defaultIcon = makeMarkerIcon('0091ff');
+  var highlightedIcon = makeMarkerIcon('FFFF24');
+  var largeInfowindow = new google.maps.InfoWindow();
+
+    map = new google.maps.Map(document.getElementById('map'), {
       zoom: 11,
       center: {lat: 34.0691755, lng: -84.6587895},
       styles: styles
     });
+
 
     for(var i = 0; i < model.length; i++){
 
@@ -62,10 +77,11 @@ var model = [
           position: position,
           title: title,
           animation: google.maps.Animation.DROP,
-          //icon: icon,
+          icon: defaultIcon,
           id: i
         });
 
+        markers.push(marker);
         marker.setMap(map);
 
         marker.addListener('click', function() {
@@ -82,7 +98,63 @@ var model = [
  }
 
 
+   function makeMarkerIcon(markerColor) {
+    var markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+      '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21,34));
+    return markerImage;
+  }
 
+
+function googleMapsCustomError(){
+    alert('Google Maps custom error triggered');
+}
+
+
+
+
+function populateInfoWindow(marker, infowindow) {
+
+  if (infowindow.marker != marker) {
+
+    infowindow.setContent('');
+    infowindow.marker = marker;
+
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+    });
+    var streetViewService = new google.maps.StreetViewService();
+    var radius = 50;
+
+    function getStreetView(data, status) {
+      if (status == google.maps.StreetViewStatus.OK) {
+        var nearStreetViewLocation = data.location.latLng;
+        var heading = google.maps.geometry.spherical.computeHeading(
+          nearStreetViewLocation, marker.position);
+          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+          var panoramaOptions = {
+            position: nearStreetViewLocation,
+            pov: {
+              heading: heading,
+              pitch: 30
+            }
+          };
+        var panorama = new google.maps.StreetViewPanorama(
+          document.getElementById('pano'), panoramaOptions);
+      } else {
+        infowindow.setContent('<div>' + marker.title + '</div>' +
+          '<div>No Street View Found</div>');
+      }
+    }
+
+    streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+    infowindow.open(map, marker);
+  }
+}
 
 
 ko.applyBindings(new viewModel);
