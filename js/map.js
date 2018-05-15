@@ -15,6 +15,7 @@ var model = [
   var markers = [];
   var map;
   var largeInfowindow = null;
+  var marker;
  
 
 
@@ -27,12 +28,12 @@ var model = [
     self.filterList = ko.computed(function(){
         return self.locationList().filter(
           function(location){
-            filterMarkers(self.filter())
+            filterMarkers(self.filter());
             return (self.filter().length == 0 || location.title.toLowerCase().includes(self.filter().toLowerCase()));
           }
         );
       });
-  }
+  };
 
 
 
@@ -47,7 +48,7 @@ var model = [
           markers[i].setVisible(true);
         }
         else{
-          markers[i].setVisible(false)
+          markers[i].setVisible(false);
         }
 
       }
@@ -65,12 +66,12 @@ var model = [
       center: {lat: 34.0691755, lng: -84.6587895},
       styles: styles
     });
-    for(var i = 0; i < model.length; i++){
+    for(let i = 0; i < model.length; i++){
 
         var position = model[i].location;
         var title = model[i].title;
 
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
           position: position,
           title: title,
           animation: google.maps.Animation.DROP,
@@ -85,6 +86,11 @@ var model = [
           populateInfoWindow(this, largeInfowindow);
         });
 
+        marker.addListener('click', function(){
+
+            toggleBounce(this);
+        } );
+
         marker.addListener('mouseover', function() {
           this.setIcon(highlightedIcon);
         });
@@ -92,6 +98,16 @@ var model = [
           this.setIcon(defaultIcon);
         });
     }
+}
+
+function toggleBounce(marker) {
+
+  if(marker.getAnimation() !== null){
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+
 }
 
 
@@ -113,8 +129,8 @@ function googleMapsCustomError(){
 
 
 function sideLinkHandler(data){
-  largeInfowindow.close()
-   for(var i = 0; i < markers.length; i++){
+  largeInfowindow.close();
+   for(let i = 0; i < markers.length; i++){
       if(data.title == markers[i].title){
         largeInfowindow.setContent(data.title);
         largeInfowindow.open(map, markers[i]);
