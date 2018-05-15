@@ -41,17 +41,17 @@ var model = [
 
     if(markers.length != 0 ){
 
-      for(var i = 0; i < markers.length; i++){
+      markers.forEach(function(marker){
 
-        if(markers[i].title.toLowerCase().includes(title.toLowerCase())){
+        if(marker.title.toLowerCase().includes(title.toLowerCase())){
 
-          markers[i].setVisible(true);
+          marker.setVisible(true);
         }
         else{
-          markers[i].setVisible(false);
+          marker.setVisible(false);
         }
 
-      }
+      })
     }
   }
  
@@ -89,11 +89,12 @@ var model = [
         marker.addListener('click', function(){
 
             toggleBounce(this);
-        } );
+        });
 
         marker.addListener('mouseover', function() {
           this.setIcon(highlightedIcon);
         });
+
         marker.addListener('mouseout', function() {
           this.setIcon(defaultIcon);
         });
@@ -130,13 +131,12 @@ function googleMapsCustomError(){
 
 function sideLinkHandler(data){
   largeInfowindow.close();
-   for(let i = 0; i < markers.length; i++){
-      if(data.title == markers[i].title){
-        largeInfowindow.setContent(data.title);
-        largeInfowindow.open(map, markers[i]);
-        break;
-      }
-   } 
+  markers.forEach(function(marker){
+    if(data.title == marker.title){
+      largeInfowindow.setContent(data.title);
+      largeInfowindow.open(map, marker);
+    }
+  })
 }
 
 
@@ -180,4 +180,4 @@ function populateInfoWindow(marker, infowindow) {
 }
 
 
-ko.applyBindings(new viewModel);
+ko.applyBindings(new viewModel());
