@@ -51,13 +51,12 @@ var model = [
           marker.setVisible(false);
         }
 
-      })
+      });
     }
   }
  
 
-
- function initMap() {
+function initMap() {
   var defaultIcon = makeMarkerIcon('0091ff');
   var highlightedIcon = makeMarkerIcon('FFFF24');
   largeInfowindow = new google.maps.InfoWindow();
@@ -101,6 +100,7 @@ var model = [
     }
 }
 
+
 function toggleBounce(marker) {
 
   if(marker.getAnimation() !== null){
@@ -125,7 +125,7 @@ function makeMarkerIcon(markerColor) {
 
 
 function googleMapsCustomError(){
-    alert('Google Maps custom error triggered');
+  alert('Google Maps custom error triggered');
 }
 
 
@@ -135,47 +135,67 @@ function sideLinkHandler(data){
     if(data.title == marker.title){
       largeInfowindow.setContent(data.title);
       largeInfowindow.open(map, marker);
+      wikiInfo(marker.title);
+      toggleBounce(marker);
     }
-  })
+  });
+}
+
+
+function wikiInfo(title){
+  var links;
+  largeInfowindow.setContent('<div id="mainContent">' + marker.title + '</div>'+
+      '<br><strong> Wikipedia Links</strong><br>'+
+      '<table class="">'+
+      '<tbody id="tbodyWiki"></tbody>'+
+      '</table>'+
+      '<div id="pano"></div>'
+      );
+    $.ajax({
+        url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+title+'&prop=links&format=json&formatversion=2',
+        method: 'GET',
+        dataType:'jsonp',
+        crossDomain:true,
+        success:function(data){
+          links = data.query.pages[0].links;
+          if(Array.isArray(links)){
+            links.forEach(function(link){
+               $('#tbodyWiki').append(
+                  '<tr>'+
+                  '<td><a class="wikiLinks" href= "https://en.wikipedia.org/wiki/'+link.title+' ">'+link.title+'</a></td>'+
+                  '</tr>'
+                );
+            });
+          } 
+          else{
+             $('#tbodyWiki').append(
+                '<tr>'+
+                '<td>No Links Found</td>'+
+                '</tr>'
+              );
+          }           
+        }
+    });
 }
 
 
 function populateInfoWindow(marker, infowindow) {
 
-  if (infowindow.marker != marker) {
-
+  if(infowindow.marker != marker) {
     infowindow.setContent('');
     infowindow.marker = marker;
-
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
     });
-    var streetViewService = new google.maps.StreetViewService();
-    var radius = 50;
-
-    function getStreetView(data, status) {
-      if (status == google.maps.StreetViewStatus.OK) {
-        var nearStreetViewLocation = data.location.latLng;
-        var heading = google.maps.geometry.spherical.computeHeading(
-          nearStreetViewLocation, marker.position);
-          infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-          var panoramaOptions = {
-            position: nearStreetViewLocation,
-            pov: {
-              heading: heading,
-              pitch: 30
-            }
-          };
-        var panorama = new google.maps.StreetViewPanorama(
-          document.getElementById('pano'), panoramaOptions);
-      } else {
-        infowindow.setContent('<div>' + marker.title + '</div>' +
-          '<div>No Street View Found</div>');
-      }
-    }
-
-    streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+    infowindow.setContent('<div id="mainContent">' + marker.title + '</div>'+
+      '<br><strong> Wikipedia Links</strong><br>'+
+      '<table class="">'+
+      '<tbody id="tbodyWiki"></tbody>'+
+      '</table>'+
+      '<div id="pano"></div>'
+      );
     infowindow.open(map, marker);
+    wikiInfo(marker.title);
   }
 }
 

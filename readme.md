@@ -8,6 +8,7 @@ The main focus of the project is to help frontend developers gain insight and be
 
 ### Application Features
 - Map Interaction.
+- Wikipedia Links related to topics
 - Simple Searching and filtering.
 - Highlighted and animated locations
 - Responsiveness ready.
@@ -23,6 +24,7 @@ The main focus of the project is to help frontend developers gain insight and be
 - Google Maps
 - JQuery
 - KnockoutJS
+- Wikipedia
 - Bootstrap v4.0
 
 ### License
