@@ -1,10 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
  <head>
   <title>Map Project</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
- <link rel="stylesheet" type="text/css" href="css/site.css">
+ <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+ <link rel="stylesheet" href="css/site.css">
  </head>
  <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="z-index: 100;">
@@ -15,7 +16,7 @@
   </nav>
   <main class="container-fluid">
     <div class="row">
-        <section class="col-lg-2 col-md-3 col-sm-12 col-xs-12 sidenav" id="navbarNav">
+        <section class="col-lg-2 col-md-12 col-sm-12 col-xs-12 sidenav">
           <div class="row">
             <div class="col-lg-12">
               <div class="input-group">
@@ -23,7 +24,7 @@
                  type="text" class="form-control" placeholder="Filter Places">
               </div>
             </div>
-            <div class="col-lg-12 col-xs-12 col-md-9 col-sm-12">
+            <div class="col-lg-12">
               <hr>
               <div data-bind="foreach: filterList">
                 <p><a href="#" class="sideLinks" data-bind="text: $data.title, click: sideLinkHandler.bind($data.title)"></a></p>
@@ -31,17 +32,23 @@
             </div>
           </div>
         </section>
-        <section class="col-lg-10" id="map"></section>
+        <section class="col-lg-10 col-xs-12 col-md-12 col-sm-12" id="map"></section>
     </div>
   </main>
    <script src="bower_components/jquery/dist/jquery.min.js"></script>
    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
    <script src="bower_components/knockout/dist/knockout.js"></script>
+
+   <script>
+     function googleMapsCustomError(){
+      alert('Google Maps custom error triggered');
+    }
+   </script>
    <script onerror="googleMapsCustomError()" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByucFSNhc5zgxf0bbfwrZYOTZyFbc73D8&libraries=geometry&v=3&callback=initMap"></script>
    <script src="js/map-styles.js"></script>
    <script src="js/map.js"></script>
 
-   <script type="text/javascript">
+   <script>
      
      $('#toggleBtn').click(function(){
 

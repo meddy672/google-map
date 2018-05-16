@@ -18,7 +18,6 @@ var model = [
   var marker;
  
 
-
   var viewModel = function() {
 
     var self = this;
@@ -29,7 +28,7 @@ var model = [
         return self.locationList().filter(
           function(location){
             filterMarkers(self.filter());
-            return (self.filter().length == 0 || location.title.toLowerCase().includes(self.filter().toLowerCase()));
+            return (self.filter().length === 0 || location.title.toLowerCase().includes(self.filter().toLowerCase()));
           }
         );
       });
@@ -39,7 +38,7 @@ var model = [
 
   function filterMarkers(title){
 
-    if(markers.length != 0 ){
+    if(markers.length !== 0 ){
 
       markers.forEach(function(marker){
 
@@ -65,17 +64,17 @@ function initMap() {
       center: {lat: 34.0691755, lng: -84.6587895},
       styles: styles
     });
-    for(let i = 0; i < model.length; i++){
+    model.forEach(function(place){
 
-        var position = model[i].location;
-        var title = model[i].title;
+        var position = place.location;
+        var title = place.title;
 
         marker = new google.maps.Marker({
           position: position,
           title: title,
           animation: google.maps.Animation.DROP,
           icon: defaultIcon,
-          id: i
+          //id: i
         });
 
         markers.push(marker);
@@ -97,7 +96,9 @@ function initMap() {
         marker.addListener('mouseout', function() {
           this.setIcon(defaultIcon);
         });
-    }
+
+    });
+
 }
 
 
@@ -124,10 +125,6 @@ function makeMarkerIcon(markerColor) {
 }
 
 
-function googleMapsCustomError(){
-  alert('Google Maps custom error triggered');
-}
-
 
 function sideLinkHandler(data){
   largeInfowindow.close();
@@ -137,6 +134,7 @@ function sideLinkHandler(data){
       largeInfowindow.open(map, marker);
       wikiInfo(marker.title);
       toggleBounce(marker);
+      map.setCenter(marker.getPosition());
     }
   });
 }
@@ -174,6 +172,9 @@ function wikiInfo(title){
                 '</tr>'
               );
           }           
+        },
+        error:function(xhr, status, error){
+          alert('There was an error retrieving information form Wikipedia');
         }
     });
 }
@@ -195,6 +196,7 @@ function populateInfoWindow(marker, infowindow) {
       '<div id="pano"></div>'
       );
     infowindow.open(map, marker);
+    map.setCenter(marker.getPosition());
     wikiInfo(marker.title);
   }
 }
